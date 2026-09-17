@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вячеслав Александров | Бренд-директор</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f97316;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* View Management */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            padding-top: 80px;
+        }
+        .page-view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active-link { color: var(--primary); }
+        nav a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--primary); transition: width 0.3s;
+        }
+        nav a:hover::after, nav a.active-link::after { width: 100%; }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80') center/cover;
+            opacity: 0.15;
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+        .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.1; }
+        .hero .subtitle { font-size: 1.5rem; font-weight: 300; margin-bottom: 1.5rem; opacity: 0.95; }
+        .hero .tagline { font-size: 1.1rem; max-width: 700px; margin: 0 auto 2rem; opacity: 0.9; }
+        
+        .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; display: block; }
+        .stat-label { font-size: 0.9rem; opacity: 0.9; }
+
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+        .btn {
+            padding: 1rem 2rem; border-radius: 8px; text-decoration: none;
+            font-weight: 600; transition: all 0.3s; display: inline-block; border: 2px solid transparent; cursor: pointer;
+        }
+        .btn-primary { background: white; color: var(--primary); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-secondary { background: transparent; color: white; border-color: white; }
+        .btn-secondary:hover { background: white; color: var(--primary); }
+
+        /* Section Styles */
+        section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-title {
+            font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center;
+            position: relative; display: inline-block; left: 50%; transform: translateX(-50%);
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 4px; background: var(--gradient); border-radius: 2px;
+        }
+        .section-subtitle { text-align: center; color: var(--gray); margin-bottom: 3rem; font-size: 1.1rem; }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: var(--gray); text-decoration: none; font-weight: 600;
+            margin-bottom: 2rem; cursor: pointer; transition: color 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); }
+
+        /* About Section */
+        .about-section {
+            background: white; padding: 4rem 2rem; border-radius: 16px;
+            margin: 2rem auto; max-width: 1200px; box-shadow: var(--shadow);
+        }
+        .about-grid { display: grid; grid-template-columns: 350px 1fr; gap: 3rem; align-items: center; }
+        .about-image { border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); }
+        .about-image img { width: 100%; height: 450px; object-fit: cover; object-position: top; display: block; }
+        .about-content h2 {
+            font-size: 2rem; margin-bottom: 1.5rem; text-align: left; position: relative; display: inline-block; left: 0; transform: none;
+        }
+        .about-content h2::after {
+            content: ''; position: absolute; bottom: -10px; left: 0; width: 60px; height: 4px;
+            background: var(--gradient); border-radius: 2px;
+        }
+        .about-content p { color: var(--gray); line-height: 1.8; margin-bottom: 1rem; font-size: 1.05rem; }
+
+        /* Metrics Grid */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .metric-card {
+            background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow);
+            transition: all 0.3s; border: 1px solid var(--gray-light);
+        }
+        .metric-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .metric-value {
+            font-size: 2.5rem; font-weight: 800; background: var(--gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem;
+        }
+        .metric-label { color: var(--gray); font-size: 1rem; font-weight: 600; }
+        .metric-description { margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray); }
+
+        /* Experience Timeline */
+        .timeline { position: relative; padding: 2rem 0; }
+        .timeline::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 100%; background: var(--gray-light);
+        }
+        .timeline-item { margin-bottom: 3rem; position: relative; width: 100%; display: flex; justify-content: center; }
+        .timeline-content {
+            background: white; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);
+            width: 90%; max-width: 600px; position: relative; border-left: 4px solid var(--primary);
+        }
+        .timeline-logo { height: 32px; width: auto; max-width: 150px; object-fit: contain; margin-bottom: 0.75rem; display: block; }
+        .timeline-date { color: var(--primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .timeline-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .timeline-company { color: var(--secondary); font-weight: 600; margin-bottom: 1rem; }
+        .timeline-desc { color: var(--gray); line-height: 1.6; }
+
+        /* Case Studies */
+        .case-study {
+            background: white; border-radius: 16px; padding: 2.5rem; margin-bottom: 2rem;
+            box-shadow: var(--shadow); border: 1px solid var(--gray-light);
+        }
+        .case-header { margin-bottom: 2rem; }
+        .case-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .case-awards { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .award-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white; padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+        }
+        .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }
+        .case-block h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .case-block p { color: var(--gray); line-height: 1.6; }
+
+        /* Projects Grid */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .project-card {
+            background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow);
+            transition: all 0.3s; border: 1px solid var(--gray-light);
+        }
+        .project-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .project-media { position: relative; width: 100%; height: 200px; background: var(--dark); overflow: hidden; }
+        .project-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .project-card:hover .project-media img { transform: scale(1.05); }
+        .project-play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px; background: rgba(255, 255, 255, 0.95); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; z-index: 2;
+        }
+        .project-play-btn:hover { transform: translate(-50%, -50%) scale(1.1); background: white; }
+        .project-play-btn::after { content: '▶'; color: var(--primary); font-size: 1rem; margin-left: 3px; }
+        .project-badge {
+            position: absolute; top: 1rem; right: 1rem; background: var(--secondary);
+            color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; z-index: 3;
+        }
+        .project-content { padding: 1.5rem; }
+        .project-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .project-year { color: var(--primary); font-weight: 600; font-size: 0.85rem; margin-bottom: 1rem; }
+        .project-description { color: var(--gray); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; }
+        .project-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .project-link {
+            flex: 1; min-width: 100px; padding: 0.5rem; background: var(--light); color: var(--dark);
+            text-align: center; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 500; transition: all 0.3s;
+        }
+        .project-link:hover { background: var(--primary); color: white; }
+
+        /* Publicity Section (NEW) */
+        .publicity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .publicity-card { 
+            background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); 
+            border: 1px solid var(--gray-light); transition: all 0.3s; 
+        }
+        .publicity-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .publicity-card h3 { color: var(--primary); margin-bottom: 1.5rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .publicity-list { list-style: none; }
+        .publicity-list li { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--gray-light); }
+        .publicity-list li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .publicity-link { color: var(--dark); text-decoration: none; font-weight: 600; transition: color 0.3s; display: block; margin-bottom: 0.25rem; }
+        .publicity-link:hover { color: var(--primary); }
+        .publicity-meta { font-size: 0.85rem; color: var(--gray); line-height: 1.4; }
+
+        /* Events Grid */
+        .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .event-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; }
+        .event-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .event-content { padding: 1.5rem; }
+        .event-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .event-meta { color: var(--primary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .event-stats { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+        .event-stat { background: var(--light); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; }
+
+        /* Skills Section */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .skill-category { background: white; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow); }
+        .skill-category h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .skill-list { list-style: none; }
+        .skill-list li { padding: 0.5rem 0; color: var(--gray); position: relative; padding-left: 1.5rem; }
+        .skill-list li::before { content: '✓'; position: absolute; left: 0; color: var(--secondary); font-weight: bold; }
+
+        /* Contact Section */
+        .contact { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem; text-align: center; }
+        .contact-content { max-width: 800px; margin: 0 auto; }
+        .contact h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .contact-info { margin: 2rem 0; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+        .contact-item { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
+        .contact-item a { color: white; text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.5); transition: border-color 0.3s; }
+        .contact-item a:hover { border-color: white; }
+        .social-links { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
+        .social-link {
+            padding: 0.8rem 1.5rem; background: rgba(255, 255, 255, 0.2); color: white;
+            text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s; border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .social-link:hover { background: white; color: var(--primary); transform: translateY(-2px); }
+
+        /* Video Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 2000; justify-content: center; align-items: center; padding: 2rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: var(--dark); border-radius: 12px; overflow: hidden; }
+        .modal-close {
+            position: absolute; top: -40px; right: 0; color: white; font-size: 2rem;
+            cursor: pointer; background: none; border: none; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+        }
+        .modal iframe { width: 100%; height: 100%; border: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats { gap: 2rem; }
+            .stat-value { font-size: 2rem; }
+            .projects-grid, .events-grid, .publicity-grid { grid-template-columns: 1fr; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-image img { height: 350px; }
+            .timeline::before { left: 20px; }
+            .timeline-content { width: calc(100% - 60px); margin-left: 60px; }
+            nav ul { gap: 1rem; padding: 0.5rem; }
+            nav a { font-size: 0.8rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a onclick="showView('view-home')" class="nav-link active-link" data-target="view-home">Главная</a></li>
+            <li><a onclick="showView('view-cases')" class="nav-link" data-target="view-cases">Кейсы и Спецпроекты</a></li>
+            <li><a onclick="showView('view-projects')" class="nav-link" data-target="view-projects">Рекламные кампании</a></li>
+            <li><a onclick="showView('view-events')" class="nav-link" data-target="view-events">Events</a></li>
+            <li><a onclick="showView('view-home'); setTimeout(() => document.getElementById('contact').scrollIntoView({behavior: 'smooth'}), 100)" class="nav-link">Контакты</a></li>
+        </ul>
+    </nav>
+
+    <!-- ================= VIEW: HOME ================= -->
+    <div id="view-home" class="page-view active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Вячеслав Александров</h1>
+                <p class="subtitle">Бренд-директор / Директор по маркетингу и коммуникациям</p>
+                <p class="tagline">20+ лет опыта построения маркетинговых функций с нуля и масштабирования брендов в федеральных компаниях. Эксперт по развитию бренда, кросс-индустриальным коллаборациям и омниканальным коммуникациям.</p>
+                
+                <div class="cta-buttons">
+                    <button onclick="showView('view-cases')" class="btn btn-primary">Смотреть кейсы</button>
+                    <a href="mailto:marketingzsb@yandex.ru" class="btn btn-secondary">Отправить email</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat"><span class="stat-value">20+</span><span class="stat-label">лет опыта</span></div>
+                    <div class="stat"><span class="stat-value">200+</span><span class="stat-label">городов</span></div>
+                    <div class="stat"><span class="stat-value">1000+</span><span class="stat-label">маркетинговых активностей</span></div>
+                    <div class="stat"><span class="stat-value">60%</span><span class="stat-label">рост Top of Mind</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section fade-in">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://lh3.googleusercontent.com/d/1CvGATWgz1W3mzsk-lwnsWrPQvNdSr5CS" alt="Вячеслав Александров">
+                </div>
+                <div class="about-content">
+                    <h2>Обо мне</h2>
+                    <p>Стратегический маркетинговый руководитель с 20-летним опытом построения маркетинговых функций с нуля и масштабирования брендов в федеральных компаниях.</p>
+                    <p>Эксперт в управлении кросс-индустриальными коллаборациями, в том числе с глобальными игроками (Marvel, ТНТ, М.Видео-Эльдорадо, Т-Банк, Альфа-Банк), выстраивании омниканальных коммуникаций и достижении лидерства в брендовых метриках.</p>
+                    <p>Умею обеспечивать максимальный ROI: в 2025–2026 гг. обеспечил <strong>рекордные за всю историю наблюдений брендовые метрики</strong> при снижении стоимости контакта (CVP) на 17% и жесткой оптимизации бюджета.</p>
+                    <p>Отраслевой эксперт: <strong>член жюри Silver Mercury и Perspectum Awards</strong>, спикер ключевых конференций, полуфиналист «Лидеров России».</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Section -->
+        <section id="metrics">
+            <h2 class="section-title">Ключевые результаты</h2>
+            <p class="section-subtitle">Динамика брендовых метрик (исторические максимумы 2026)</p>
+            <div class="metrics-grid">
+                <div class="metric-card fade-in">
+                    <div class="metric-value">19,3%</div>
+                    <div class="metric-label">Top-of-mind</div>
+                    <div class="metric-description">Абсолютный исторический максимум бренда. Рост с 11,9% (+62%)</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-value">28,7%</div>
+                    <div class="metric-label">Спонтанная узнаваемость</div>
+                    <div class="metric-description">Рост с 19,8% (+45%). Лидерство в категории с большим отрывом</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-value">64,7%</div>
+                    <div class="metric-label">Наведенная узнаваемость</div>
+                    <div class="metric-description">Рост с 53,3% (+21%). Доминирование в сознании целевой аудитории</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-value">-17%</div>
+                    <div class="metric-label">Снижение CVP</div>
+                    <div class="metric-description">Стоимость контакта 0,179 руб. (на 17,32% дешевле плана)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <h2 class="section-title">Опыт работы</h2>
+            <p class="section-subtitle">Карьерный путь и ключевые достижения</p>
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <img src="https://cdn.esoft.digital/content/cluster/media/56/39a3298bdc9fc0f3c72acf626dbb385a65c37f56.svg" alt="Логотип Этажи" class="timeline-logo" onerror="this.style.display='none'">
+                        <div class="timeline-date">Декабрь 2020 — Настоящее время</div>
+                        <div class="timeline-title">Бренд-директор</div>
+                        <div class="timeline-company">ЭТАЖИ (агентство недвижимости)</div>
+                        <div class="timeline-desc">
+                            • Построение подразделения бренд-коммуникаций с нуля (команда до 20 человек)<br>
+                            • Управление федеральным и региональным PR, порталом «Этажи Журнал» (~1 млн визитов/мес)<br>
+                            • Организация федеральных активностей в 200+ городах России и СНГ<br>
+                            • Рост упоминаний в СМИ в 3 раза (до 18 000+ в год)<br>
+                            • Многолетнее лидерство по брендовым метрикам в категории
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <img src="https://lh3.googleusercontent.com/d/1i6z9Yl9vz2X-izhdbbId6xiDGb-VqvGy" alt="Логотип ЛетоЛето" class="timeline-logo" onerror="this.style.display='none'">
+                        <div class="timeline-date">Июль 2019 — Май 2020</div>
+                        <div class="timeline-title">Руководитель отдела маркетинга</div>
+                        <div class="timeline-company">Термальный курорт «ЛетоЛето»</div>
+                        <div class="timeline-desc">
+                            • Управление командой из 16 человек (включая колл-центр)<br>
+                            • Систематизация бизнес-процессов и нормативной документации<br>
+                            • GR-взаимодействие с органами власти для развития туристического потенциала региона
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Sberbank_Logo_2020.svg/330px-Sberbank_Logo_2020.svg.png" alt="Логотип Сбербанк" class="timeline-logo" onerror="this.style.display='none'">
+                        <div class="timeline-date">Октябрь 2011 — Июль 2019</div>
+                        <div class="timeline-title">Руководитель Сектора маркетинга и коммуникаций</div>
+                        <div class="timeline-company">ПАО Сбербанк</div>
+                        <div class="timeline-desc">
+                            • Комплексная организация РК и промо-акций (B2C/B2B) в 150+ офисах<br>
+                            • Реализация масштабных спонсорских проектов (Чемпионат мира по дзюдо, «Зеленый марафон»)<br>
+                            • ТОП-З в России среди 70+ маркетинговых подразделений Сбербанка (2014 г.)
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <img src="https://toplogos.ru/images/logo-zapsibkombank.png" alt="Логотип Запсибкомбанк" class="timeline-logo" onerror="this.style.display='none'">
+                        <div class="timeline-date">Июнь 2006 — Октябрь 2011</div>
+                        <div class="timeline-title">Главный специалист Управления по связям с общественностью и рекламе</div>
+                        <div class="timeline-company">Запсибкомбанк</div>
+                        <div class="timeline-desc">
+                            • Организация комплексных маркетинговых активностей<br>
+                            • Организация федеральных стимулирующих лотерей<br>
+                            • Координация 25 филиалов<br>
+                            • Управление тендерами и оценка эффективности РК
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <h2 class="section-title">Ключевые компетенции</h2>
+            <p class="section-subtitle">Профессиональные навыки и экспертиза</p>
+            <div class="skills-grid">
+                <div class="skill-category fade-in">
+                    <h3>📊 Стратегическое управление</h3>
+                    <ul class="skill-list">
+                        <li>Постановка маркетинговой функции с нуля</li>
+                        <li>Создание работоспособных подразделений (2-20 человек)</li>
+                        <li>Управление сложными креативными командами</li>
+                        <li>100% ответственность за достижение планового результата</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in">
+                    <h3>🎯 Полный цикл маркетинга</h3>
+                    <ul class="skill-list">
+                        <li>Аналитика, исследования, креатив и продакшн</li>
+                        <li>Медиапланирование и медиабаинг</li>
+                        <li>Интернет-маркетинг, клиентский опыт, PR, SMM</li>
+                        <li>Событийные проекты, внутренние коммуникации</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in">
+                    <h3>🤝 Партнерства и GR</h3>
+                    <ul class="skill-list">
+                        <li>Развитая GR-функция, опыт работы с госструктурами</li>
+                        <li>Навык выстраивания долгосрочных партнерских отношений</li>
+                        <li>Питчинг проектов и защита позиции при переговорах</li>
+                        <li>Управление проектами с большим количеством внешних партнеров</li>
+                    </ul>
+                </div>
+                <div class="skill-category fade-in">
+                    <h3>🏢 Управление проектами</h3>
+                    <ul class="skill-list">
+                        <li>Опыт работы на разных уровнях структуры в федеральных компаниях</li>
+                        <li>Знание особенностей взаимодействия на каждом уровне</li>
+                        <li>Управление бюджетом до 300 млн ₽</li>
+                        <li>Координация 200+ городов присутствия</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Publicity Section -->
+        <section id="publicity">
+            <h2 class="section-title">Публичная активность и экспертность</h2>
+            <p class="section-subtitle">Выступления, судейство и публикации в профильных медиа</p>
+            
+            <div class="publicity-grid">
+                <!-- Speaking -->
+                <div class="publicity-card fade-in">
+                    <h3>🎤 Спикер конференций</h3>
+                    <ul class="publicity-list">
+                        <li>
+                            <a href="https://adindex.ru/events/city/2024/discuss/323772.phtml" target="_blank" class="publicity-link">AdIndex City Conference 2024</a>
+                            <span class="publicity-meta">Кейсотека «220-22»: лицензионное промо по мотивам ситкома ТНТ «СашаТаня» совместно с ГПМ Реклама</span>
+                        </li>
+                        <li>
+                            <a href="https://regions.advertisingforum.ru/#speakers" target="_blank" class="publicity-link">Национальный Рекламный Форум «Регионы»</a>
+                            <span class="publicity-meta">Тренды лицензирования и паттерны поведения молодой аудитории</span>
+                        </li>
+                        <li>
+                            <a href="https://lp.etagi.com/slet#!/tab/541747940-2" target="_blank" class="publicity-link">Крупнейший слет маркетологов «Этажи»</a>
+                            <span class="publicity-meta">Ключевой спикер и организатор масштабного отраслевого мероприятия</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Jury -->
+                <div class="publicity-card fade-in">
+                    <h3>⚖️ Эксперт жюри</h3>
+                    <ul class="publicity-list">
+                        <li>
+                            <a href="https://perspectum.ru/jury/" target="_blank" class="publicity-link">Perspectum Awards 2024</a>
+                            <span class="publicity-meta">Член жюри международного конкурса маркетинговых услуг</span>
+                        </li>
+                        <li>
+                            <span class="publicity-link" style="cursor: default;">Silver Mercury SM Awards 2025</span>
+                            <span class="publicity-meta">Член жюри в блоке J. ADVERTISING</span>
+                        </li>
+                        <li>
+                            <span class="publicity-link" style="cursor: default;">Silver Mercury SM Awards 2026</span>
+                            <span class="publicity-meta">Член жюри в блоке C. CREATIVITY</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Media -->
+                <div class="publicity-card fade-in">
+                    <h3>📰 Публикации в СМИ</h3>
+                    <ul class="publicity-list">
+                        <li>
+                            <a href="https://www.gazprom-media.com/ru/media/licenzirovanie-i-patterny-povedeniya-molodoy-auditorii-spikery-gpm-reklama-vystupili-na-nrf-regiony-2024" target="_blank" class="publicity-link">Газпром-Медиа Холдинг</a>
+                            <span class="publicity-meta">Экспертный комментарий: Лицензирование и паттерны поведения молодой аудитории</span>
+                        </li>
+                        <li>
+                            <a href="https://www.sostav.ru/publication/kejs-gpm-reklama-etazhi-kollaboratsiya-povysit-prodazhi-uznavaemost-sashatanya-68856.html" target="_blank" class="publicity-link">Sostav.ru</a>
+                            <span class="publicity-meta">Кейс промо по мотивам российского сериала «СашаТаня»</span>
+                        </li>
+                        <li>
+                            <a href="https://adpass.ru/chto-zhdet-marketing-v-2025-prazdnichnyj-prognoz-ot-ekspertov-perspectum-awards/" target="_blank" class="publicity-link">Adpass.ru</a>
+                            <span class="publicity-meta">Экспертный прогноз</span>
+                        </li>
+                        <li>
+                            <a href="https://dvizhenie.ru/media/292/kak-sniat-effektivnyi-reklamnyi-rolik-spetsifika-rynka-nedvizhimosti" target="_blank" class="publicity-link">Движение.ру</a>
+                            <span class="publicity-meta">Как снять эффективный рекламный ролик: специфика рынка недвижимости</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="contact-content">
+                <h2>Открыт для эффективной коммуникации</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">Приоритетный способ связи - Telegram</p>
+                <div class="contact-info">
+                    <div class="contact-item"><span>📱</span><a href="tel:+79088749625">+7 (908) 874-96-25</a></div>
+                    <div class="contact-item"><span>✉️</span><a href="mailto:marketingzsb@yandex.ru">marketingzsb@yandex.ru</a></div>
+                    <div class="contact-item"><span>📍</span><span>Москва</span></div>
+                </div>
+                <div class="social-links">
+                    <a href="https://t.me/Slava_Aleksandrov" target="_blank" class="social-link">💬 Telegram: @Slava_Aleksandrov</a>
+                    <a href="https://instagram.com/Slava_Aleksandrov" target="_blank" class="social-link">📷 Instagram</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= VIEW: CASES & SPECIAL PROJECTS ================= -->
+    <div id="view-cases" class="page-view">
+        <section>
+            <a onclick="showView('view-home')" class="back-btn">← На главную</a>
+            <h2 class="section-title">Кейсы и Спецпроекты</h2>
+            <p class="section-subtitle">Крупнейшие проекты с измеримыми бизнес-результатами</p>
+
+            <div class="case-study fade-in">
+                <div class="case-header">
+                    <h3 class="case-title">Комплексная ФРК — Весенний флайт 2026 <span class="case-awards"><span class="award-badge">Исторические максимумы</span></span></h3>
+                </div>
+                <div class="case-grid">
+                    <div class="case-block"><h4>Задача</h4><p>Максимизировать узнаваемость и позитивные атрибуты бренда в условиях ограниченного бюджета.</p></div>
+                    <div class="case-block"><h4>Решение</h4><p>Синергетический микс: собственная охватная ФРК (ТВ + Digital), нативные интеграции в шоу VK Видео и вирусный PR-спецпроект.</p></div>
+                    <div class="case-block"><h4>Результат</h4><p>• Фактический охват 401,6 млн контактов (+25,48% к плану)<br>• CVP: 0,179 руб. (-17,32% к плану)<br>• Все брендовые метрики пробили исторический потолок</p></div>
+                </div>
+            </div>
+
+            <div class="case-study fade-in">
+                <div class="case-header">
+                    <h3 class="case-title">«Этажи» × М.Видео / Эльдорадо <span class="case-awards"><span class="award-badge">2024-2025</span></span></h3>
+                </div>
+                <div class="case-grid">
+                    <div class="case-block"><h4>Задача</h4><p>Привлечь новую аудиторию через беспрецедентную коллаборацию с федеральным ритейлером.</p></div>
+                    <div class="case-block"><h4>Решение</h4><p>Промо-кампания с розыгрышем 11 квартир в Москве. Омниканальный охват: сайты (20 млн визитов/мес), 1000+ магазинов, 25+ ТВ-каналов.</p></div>
+                    <div class="case-block"><h4>Результат</h4><p>• 1417 TRP на ТВ, 250 млн показов в digital<br>• «Этажи» закреплены как единственный партнер акции на федеральном телевидении.</p></div>
+                </div>
+            </div>
+
+            <div class="case-study fade-in">
+                <div class="case-header">
+                    <h3 class="case-title">«Этажи» × Т-Банк <span class="case-awards"><span class="award-badge">Победитель «Выгода-2025»</span></span></h3>
+                </div>
+                <div class="case-grid">
+                    <div class="case-block">
+                        <h4>Задача</h4>
+                        <p>Обеспечить максимальные охваты при сопоставимой стоимости участия в условиях дефицита средств в локальном фонде (0,2%).</p>
+                    </div>
+                    <div class="case-block">
+                        <h4>Решение</h4>
+                        <p>Реализация проекта за счет централизованного контракта фондированного партнерами сети. Интеграция в рекламную платформу Т-Банка с фокусом на эффективность.</p>
+                    </div>
+                    <div class="case-block">
+                        <h4>Результат</h4>
+                        <p>• Победа в номинации самых эффективных партнеров на премии «Выгода-2025» от Т-Банка.<br>
+                        • Широкое освещение в деловых СМИ (Forbes Brandvoice, Sostav.ru).<br>
+                        • Максимальные охваты при строгом контроле стоимости контакта.</p>
+                    </div>
+                </div>
+                <div class="project-links" style="margin-top: 1.5rem;">
+                    <a href="https://www.sostav.ru/publication/t-bank-nagradil-partnerov-80256.html" target="_blank" class="project-link">Статья на Sostav.ru</a>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 4rem;">Спецпроекты</h2>
+            <p class="section-subtitle">Нестандартные интеграции и вирусные механики</p>
+
+            <div class="case-study fade-in" style="border-left: 4px solid var(--secondary);">
+                <div class="case-header">
+                    <h3 class="case-title">«Красная карточка» × Медиалига <span class="case-awards"><span class="award-badge">Лучший спецпроект мая (Hot Digital)</span></span></h3>
+                </div>
+                <div class="case-grid">
+                    <div class="case-block">
+                        <h4>Задача</h4>
+                        <p>Создать вирусную интеграцию бренда недвижимости в футбольный контент, превратив негативный момент матча в запоминающееся позитивное упоминание.</p>
+                    </div>
+                    <div class="case-block">
+                        <h4>Решение</h4>
+                        <p>Разместили логотип «Этажи» и слоган <strong>«Домой!»</strong> на красных карточках судей WINLINE Media League. Интеграция срабатывала в самый эмоциональный момент матча.</p>
+                    </div>
+                    <div class="case-block">
+                        <h4>Результат</h4>
+                        <p>• Более 6 000 000 просмотров<br>
+                        • Перевыполнение плана по охвату на 397,8%<br>
+                        • Рекордная стоимость контакта: 0,17 руб. при бюджете 1 млн руб.</p>
+                    </div>
+                </div>
+                <div class="project-links" style="margin-top: 1.5rem;">
+                    <a href="https://www.adsoftheworld.com/campaigns/go-home-6f9f8e2b-c897-4c6c-9f67-3d1a6eff829d" target="_blank" class="project-link">Ads of the World</a>
+                    <a href="https://hotdigital.ru/" target="_blank" class="project-link">Hot Digital</a>
+                </div>
+            </div>
+
+            <div class="case-study fade-in">
+                <div class="case-header">
+                    <h3 class="case-title">«Этажи» × ТНТ (САШАТАНЯ) <span class="case-awards"><span class="award-badge">Лицензионная коллаборация</span></span></h3>
+                </div>
+                <div class="case-grid">
+                    <div class="case-block"><h4>Задача</h4><p>Повысить доверие семейной аудитории через эмоциональную связь с популярным контентом.</p></div>
+                    <div class="case-block"><h4>Решение</h4><p>Интеграция в эфир ТВ, формат «шортс», эксклюзивная лицензия на использование образов для локального усиления.</p></div>
+                    <div class="case-block"><h4>Результат</h4><p>• Охват 41 млн чел./год<br>• Доля 14.7%<br>• Рейтинг 9.2</p></div>
+                </div>
+                <!-- ADDED: Links to media coverage specifically about this case -->
+                <div class="project-links" style="margin-top: 1.5rem;">
+                    <a href="https://www.sostav.ru/publication/kejs-gpm-reklama-etazhi-kollaboratsiya-povysit-prodazhi-uznavaemost-sashatanya-68856.html" target="_blank" class="project-link">Разбор кейса на Sostav.ru</a>
+                    <a href="https://adpass.ru/kejs-gpm-reklama-i-kompanii-etazhi-kak-povysit-prodazhi-pri-pomoshhi-litsenzionnoj-kollaboratsii/" target="_blank" class="project-link">Публикация на ADPASS</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= VIEW: PROJECTS ================= -->
+    <div id="view-projects" class="page-view">
+        <section>
+            <a onclick="showView('view-home')" class="back-btn">← На главную</a>
+            <h2 class="section-title">Рекламные кампании</h2>
+            <p class="section-subtitle">Портфолио реализованных проектов с видеоматериалами</p>
+
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/fn2AAlA_1DU/maxresdefault.jpg" alt="Ипотека">
+                        <div class="project-play-btn" onclick="openModal('fn2AAlA_1DU')"></div>
+                        <span class="project-badge">2021</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Ипотека</h3>
+                        <p class="project-year">Федеральная рекламная кампания</p>
+                        <p class="project-description">Комплексная кампания по продвижению ипотечных продуктов</p>
+                        <div class="project-links">
+                            <a href="https://www.sostav.ru/blogs/259947/33834" target="_blank" class="project-link">Sostav.ru</a>
+                            <a href="#" class="project-link" onclick="openModal('fn2AAlA_1DU'); return false;">Видео 1</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/q5fFMyZwWr8/maxresdefault.jpg" alt="Новостройки">
+                        <div class="project-play-btn" onclick="openModal('q5fFMyZwWr8')"></div>
+                        <span class="project-badge">2021</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Покупай новостройки безопасно</h3>
+                        <p class="project-year">Кампания по безопасности сделок</p>
+                        <p class="project-description">Продвижение безопасных сделок с новостройками</p>
+                        <div class="project-links">
+                            <a href="https://www.sostav.ru/blogs/259947/33820" target="_blank" class="project-link">Sostav.ru</a>
+                            <a href="#" class="project-link" onclick="openModal('q5fFMyZwWr8'); return false;">Видео 1</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/KxN1yHvJh74/maxresdefault.jpg" alt="Marvel">
+                        <div class="project-play-btn" onclick="openModal('KxN1yHvJh74')"></div>
+                        <span class="project-badge" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">Marvel × Этажи</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Своя вселенная — свой дом</h3>
+                        <p class="project-year">Коллаборация с Marvel/Disney, 2021</p>
+                        <p class="project-description">Масштабная лицензионная коллаборация с героями Marvel</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link" onclick="openModal('KxN1yHvJh74'); return false;">Смотреть ролик</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/OblvlwyOyYo/maxresdefault.jpg" alt="Для тех, кто навыбирался">
+                        <div class="project-play-btn" onclick="openModal('OblvlwyOyYo')"></div>
+                        <span class="project-badge" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">Silver Mercury</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Для тех, кто навыбирался</h3>
+                        <p class="project-year">2022</p>
+                        <p class="project-description">🥈 Серебро SM 2023 (Best Strategy). Честный креатив, бьющий в реальные боли клиентов.</p>
+                        <div class="project-links">
+                            <a href="https://youtu.be/T7sEGppYW1Y" target="_blank" class="project-link">YouTube</a>
+                            <a href="#" class="project-link" onclick="openModal('OblvlwyOyYo'); return false;">Видео 1</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/Qu2wNqNiqvo/maxresdefault.jpg" alt="Избавляем от суеты">
+                        <div class="project-play-btn" onclick="openModal('Qu2wNqNiqvo')"></div>
+                        <span class="project-badge">2023</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Избавляем от суеты</h3>
+                        <p class="project-year">2023</p>
+                        <p class="project-description">Коммуникация о простоте и скорости процесса сделок с недвижимостью.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link" onclick="openModal('Qu2wNqNiqvo'); return false;">Видео 1</a>
+                            <a href="#" class="project-link" onclick="openModal('WmybkzCJPc8'); return false;">Видео 2</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://img.youtube.com/vi/Afu9ey0pdBQ/maxresdefault.jpg" alt="Наконец-то дома">
+                        <div class="project-play-btn" onclick="openModal('Afu9ey0pdBQ')"></div>
+                        <span class="project-badge">Новый год 2024</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Наконец-то дома</h3>
+                        <p class="project-year">Новогодняя кампания 2024</p>
+                        <p class="project-description">Праздничная кампания о возвращении домой</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link" onclick="openModal('Afu9ey0pdBQ'); return false;">Смотреть ролик</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-media">
+                        <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&q=80" alt="Без долгих историй">
+                        <div class="project-play-btn" onclick="window.open('https://disk.yandex.ru/d/BQv7a0dQtmaJ3w/', '_blank')"></div>
+                        <span class="project-badge" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">WOW Awards</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Без долгих историй</h3>
+                        <p class="project-year">2025</p>
+                        <p class="project-description">🥈 Серебро WOW Awards 2025 (Лучший ТВ-ролик). Лаконичность и панчлайн.</p>
+                        <div class="project-links">
+                            <a href="https://disk.yandex.ru/d/BQv7a0dQtmaJ3w/" target="_blank" class="project-link">Открыть материалы</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= VIEW: EVENTS ================= -->
+    <div id="view-events" class="page-view">
+        <section>
+            <a onclick="showView('view-home')" class="back-btn">← На главную</a>
+            <h2 class="section-title">Событийные проекты</h2>
+            <p class="section-subtitle">Масштабные мероприятия в разных городах России</p>
+
+            <div class="events-grid">
+                <div class="event-card fade-in">
+                    <div class="event-content">
+                        <h3 class="event-title">Э:Форум | Культура Первых</h3>
+                        <p class="event-meta">19 сентября 2025, г. Санкт-Петербург</p>
+                        <p>Масштабное отраслевое событие для награждения лучших риелторов сети</p>
+                        <div class="event-stats">
+                            <span class="event-stat">👥 1 500 участников</span>
+                            <span class="event-stat">🎤 Руки Вверх, Звери</span>
+                            <span class="event-stat">⭐ Оценка 4.85/5</span>
+                        </div>
+                        <div class="project-links" style="margin-top: 1rem;">
+                            <a href="#" class="project-link" onclick="openModal('P6gA1lrMsz0'); return false;">Видео 1</a>
+                            <a href="#" class="project-link" onclick="openModal('fj9dtM46xEM'); return false;">Видео 2</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-content">
+                        <h3 class="event-title">Open-air концерт</h3>
+                        <p class="event-meta">Массовое мероприятие под открытым небом</p>
+                        <p>Организация масштабного концерта с полным циклом продвижения</p>
+                        <div class="event-stats">
+                            <span class="event-stat">🎵 47 000 зрителей</span>
+                            <span class="event-stat">🎪 Open-air</span>
+                        </div>
+                        <div class="project-links" style="margin-top: 1rem;">
+                            <a href="#" class="project-link" onclick="openModal('-Vsyee9DPNw'); return false;">Смотреть отчет</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-content">
+                        <h3 class="event-title">Зеленый марафон</h3>
+                        <p class="event-meta">Сбербанк, 2012–2019</p>
+                        <p>Спортивно-благотворительное мероприятие в городах присутствия</p>
+                        <div class="event-stats">
+                            <span class="event-stat">🏃 До 5 000 участников</span>
+                            <span class="event-stat">🌍 7 лет</span>
+                        </div>
+                        <div class="project-links" style="margin-top: 1rem;">
+                            <a href="https://72.ru/text/gorod/2019/06/04/66112660/" target="_blank" class="project-link">Тюмень 2019</a>
+                            <a href="https://72.ru/text/gorod/2018/05/28/55138461/" target="_blank" class="project-link">Тюмень 2018</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-content">
+                        <h3 class="event-title">Онлайн-трансляции и розыгрыши</h3>
+                        <p class="event-meta">Прямые эфиры с федеральной аудиторией</p>
+                        <p>Проведение прямых эфиров с розыгрышами призов для всей страны</p>
+                        <div class="event-stats">
+                            <span class="event-stat">📡 Федеральный охват</span>
+                            <span class="event-stat">🎁 Розыгрыши квартир</span>
+                        </div>
+                        <div class="project-links" style="margin-top: 1rem;">
+                            <a href="https://www.youtube.com/live/Eqh3Qte8pqE" target="_blank" class="project-link">День рождения 2021</a>
+                            <a href="https://www.youtube.com/live/5mrUgCCriPI" target="_blank" class="project-link">Розыгрыш 2022</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card fade-in">
+                    <div class="event-content">
+                        <h3 class="event-title">Закрытые мероприятия</h3>
+                        <p class="event-meta">Премиальные события для статусных клиентов</p>
+                        <p>Организация проектов для аудитории от 20 до 2000 человек с медийными спикерами</p>
+                        <div class="event-stats">
+                            <span class="event-stat">🎭 Теодор Курентзис</span>
+                            <span class="event-stat">🎤 Леонид Парфенов, Игорь Чапурин</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <iframe id="videoFrame" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // View Switcher Logic
+        function showView(viewId) {
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-link');
+                if(link.getAttribute('data-target') === viewId) {
+                    link.classList.add('active-link');
+                }
+            });
+        }
+
+        // Modal functions
+        function openModal(videoId) {
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            frame.src = '';
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Add fade-in animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.metric-card, .project-card, .event-card, .skill-category, .timeline-content, .case-study, .publicity-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
